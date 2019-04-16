@@ -7,7 +7,7 @@ namespace CurryHoward
         /// <summary>
         /// (A ∧ (A → B)) → B
         /// </summary>
-        static B ModusPonens<A, B>(
+        public static B ModusPonens<A, B>(
             Func<A, B> A_implies_B,
             A proof_of_A)
             => A_implies_B(proof_of_A);
@@ -15,14 +15,14 @@ namespace CurryHoward
         /// <summary>
         /// (A ∧ B) → (B ∧ A)
         /// </summary>
-        static (B, A) ConjunctionIsCommutative<A, B>(
+        public static (B, A) ConjunctionIsCommutative<A, B>(
             (A proof_of_A, B proof_of_B) A_and_B)
             => (A_and_B.proof_of_B, A_and_B.proof_of_A);
 
         /// <summary>
         /// (A → C) ∧ (B → C) ∧ (A ∨ B) → C
         /// </summary>
-        static C DisjunctionElimination<A, B, C>(
+        public static C DisjunctionElimination<A, B, C>(
             Func<A, C> A_implies_C,
             Func<B, C> B_implies_C,
             Either<A, B> A_or_B)
@@ -33,7 +33,7 @@ namespace CurryHoward
         /// <summary>
         /// (A → B) ∧ ¬B → ¬A
         /// </summary>
-        static Not<A> ModusTollens<A, B>(
+        public static Not<A> ModusTollens<A, B>(
             Func<A, B> A_implies_B,
             Not<B> not_B)
         {
@@ -48,7 +48,7 @@ namespace CurryHoward
         /// <summary>
         /// (¬A ∧ ¬B) → ¬(A ∨ B)
         /// </summary>
-        static Not<Either<A, B>> DeMorgan1<A, B>(
+        public static Not<Either<A, B>> DeMorgan1<A, B>(
             Not<A> not_A,
             Not<B> not_B)
         {
@@ -64,7 +64,7 @@ namespace CurryHoward
         /// <summary>
         /// ¬A ∨ ¬B → ¬(A ∧ B)
         /// </summary>
-        static Not<(A, B)> DeMorgan2<A, B>(
+        public static Not<(A, B)> DeMorgan2<A, B>(
             Either<Not<A>, Not<B>> not_A_or_not_B)
         {
             Absurd f((A proof_of_A, B proof_of_B) A_and_B)
@@ -79,7 +79,7 @@ namespace CurryHoward
         /// <summary>
         /// A ∨ ~A
         /// </summary>
-        static Either<A, Not<A>> ExcludedMiddle<A>()
+        public static Either<A, Not<A>> ExcludedMiddle<A>()
         {
             throw new Exception("???");
         }
@@ -87,7 +87,7 @@ namespace CurryHoward
         /// <summary>
         /// A → ¬¬A
         /// </summary>
-        static Not<Not<A>> DoubleNegation<A>(A proof_of_A)
+        public static Not<Not<A>> DoubleNegation<A>(A proof_of_A)
         {
             Absurd f(Not<A> not_A)
             {

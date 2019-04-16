@@ -22,6 +22,6 @@ namespace CurryHoward
         public Absurd Apply(A a)
             => _func(a);
 
-        private Func<A, Absurd> _func;
+        private readonly Func<A, Absurd> _func;
     }
 }

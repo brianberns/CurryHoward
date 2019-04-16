@@ -4,7 +4,7 @@ namespace CurryHoward
 {
     class Program
     {
-        public static void EitherDemo()
+        static void EitherDemo()
         {
             Either<float, string> Divide(float num, float den)
             {
