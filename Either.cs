@@ -46,8 +46,8 @@ namespace CurryHoward
             Func<TRight, T> rightFunc)
             => _isLeft ? leftFunc(_left) : rightFunc(_right);
 
-        private TLeft _left;
-        private TRight _right;
-        private bool _isLeft;
+        private readonly TLeft _left;
+        private readonly TRight _right;
+        private readonly bool _isLeft;
     }
 }
