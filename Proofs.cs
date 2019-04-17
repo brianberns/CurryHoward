@@ -5,7 +5,7 @@ namespace CurryHoward
     static class Proofs
     {
         /// <summary>
-        /// (A ∧ (A → B)) → B
+        /// ((A → B) ∧ A) → B
         /// </summary>
         public static B ModusPonens<A, B>(
             Func<A, B> A_implies_B,
@@ -18,6 +18,21 @@ namespace CurryHoward
         public static (B, A) ConjunctionIsCommutative<A, B>(
             (A proof_of_A, B proof_of_B) A_and_B)
             => (A_and_B.proof_of_B, A_and_B.proof_of_A);
+
+        /// <summary>
+        /// (A ∧ B) ∧ (B ∧ C) → (A ∧ C)
+        /// </summary>
+        public static Func<A, C> Syllogism<A, B, C>(
+            Func<A, B> A_implies_B,
+            Func<B, C> B_implies_C)
+        {
+            C A_implies_C(A proof_of_A)
+            {
+                var proof_of_B = A_implies_B(proof_of_A);
+                return B_implies_C(proof_of_B);
+            }
+            return new Func<A, C>(A_implies_C);
+        }
 
         /// <summary>
         /// (A → C) ∧ (B → C) ∧ (A ∨ B) → C
@@ -77,7 +92,7 @@ namespace CurryHoward
         }
 
         /// <summary>
-        /// A ∨ ~A
+        /// A ∨ ¬A
         /// </summary>
         public static Either<A, Not<A>> ExcludedMiddle<A>()
         {
