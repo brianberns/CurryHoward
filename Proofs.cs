@@ -106,9 +106,7 @@ namespace CurryHoward
         public static Not<Not<A>> DoubleNegation<A>(A proof_of_A)
         {
             Absurd not_A_implies_absurd(Not<A> not_A)
-            {
-                return not_A.Apply(proof_of_A);
-            }
+                => not_A.Apply(proof_of_A);
             return new Not<Not<A>>(not_A_implies_absurd);
         }
 
