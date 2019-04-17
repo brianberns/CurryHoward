@@ -37,12 +37,12 @@ namespace CurryHoward
             Func<A, B> A_implies_B,
             Not<B> not_B)
         {
-            Absurd f(A proof_of_A)
+            Absurd A_implies_absurd(A proof_of_A)
             {
                 var proof_of_B = A_implies_B(proof_of_A);
                 return not_B.Apply(proof_of_B);
             }
-            return new Not<A>(f);
+            return new Not<A>(A_implies_absurd);
         }
 
         /// <summary>
@@ -52,13 +52,13 @@ namespace CurryHoward
             Not<A> not_A,
             Not<B> not_B)
         {
-            Absurd f(Either<A, B> A_or_B)
+            Absurd A_or_B_implies_absurd(Either<A, B> A_or_B)
             {
                 return A_or_B.Match(
                     a => not_A.Apply(a),
                     b => not_B.Apply(b));
             }
-            return new Not<Either<A, B>>(f);
+            return new Not<Either<A, B>>(A_or_B_implies_absurd);
         }
 
         /// <summary>
@@ -67,13 +67,13 @@ namespace CurryHoward
         public static Not<(A, B)> DeMorgan2<A, B>(
             Either<Not<A>, Not<B>> not_A_or_not_B)
         {
-            Absurd f((A proof_of_A, B proof_of_B) A_and_B)
+            Absurd A_and_B_implies_Absurd((A proof_of_A, B proof_of_B) A_and_B)
             {
                 return not_A_or_not_B.Match(
                     not_A => not_A.Apply(A_and_B.proof_of_A),
                     not_B => not_B.Apply(A_and_B.proof_of_B));
             }
-            return new Not<(A, B)>(f);
+            return new Not<(A, B)>(A_and_B_implies_Absurd);
         }
 
         /// <summary>
@@ -89,11 +89,31 @@ namespace CurryHoward
         /// </summary>
         public static Not<Not<A>> DoubleNegation<A>(A proof_of_A)
         {
-            Absurd f(Not<A> not_A)
+            Absurd not_A_implies_absurd(Not<A> not_A)
             {
                 return not_A.Apply(proof_of_A);
             }
-            return new Not<Not<A>>(f);
+            return new Not<Not<A>>(not_A_implies_absurd);
+        }
+
+        /// <summary>
+        /// ¬¬(A ∨ ¬A)
+        /// https://rawgit.com/iblech/talk-constructive-mathematics/master/negneg-translation.pdf, page 14
+        /// </summary>
+        public static Not<Not<Either<A, Not<A>>>> DoubleNegativeExcludedMiddle<A>()
+        {
+            Absurd not_ex_mid_implies_absurd(Not<Either<A, Not<A>>> not_ex_mid)
+            {
+                Absurd A_implies_absurd(A proof_of_A)
+                {
+                    Either<A, Not<A>> ex_mid_1 = proof_of_A;
+                    return not_ex_mid.Apply(ex_mid_1);
+                }
+                var not_A = new Not<A>(A_implies_absurd);
+                Either<A, Not<A>> ex_mid_2 = not_A;
+                return not_ex_mid.Apply(ex_mid_2);
+            }
+            return new Not<Not<Either<A, Not<A>>>>(not_ex_mid_implies_absurd);
         }
     }
 }
