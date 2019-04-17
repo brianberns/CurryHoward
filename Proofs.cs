@@ -86,6 +86,7 @@ namespace CurryHoward
 
         /// <summary>
         /// A → ¬¬A
+        /// But can't show: ¬¬A → A
         /// </summary>
         public static Not<Not<A>> DoubleNegation<A>(A proof_of_A)
         {
