@@ -20,7 +20,7 @@ namespace CurryHoward
             => (A_and_B.proof_of_B, A_and_B.proof_of_A);
 
         /// <summary>
-        /// (A ∧ B) ∧ (B ∧ C) → (A ∧ C)
+        /// (A → B) ∧ (B → C) → (A → C)
         /// </summary>
         public static Func<A, C> Syllogism<A, B, C>(
             Func<A, B> A_implies_B,
