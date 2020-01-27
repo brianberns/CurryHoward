@@ -92,7 +92,7 @@ namespace CurryHoward
         }
 
         /// <summary>
-        /// A ∨ ¬A
+        /// Can't be proved: A ∨ ¬A
         /// </summary>
         public static Either<A, Not<A>> ExcludedMiddle<A>()
         {
@@ -100,10 +100,17 @@ namespace CurryHoward
         }
 
         /// <summary>
-        /// A → ¬¬A
-        /// But can't show: ¬¬A → A
+        /// Can't be proved: ¬¬A → A
         /// </summary>
-        public static Not<Not<A>> DoubleNegation<A>(A proof_of_A)
+        public static A RemoveDoubleNegation<A>(Not<Not<A>> proof_of_not_not_A)
+        {
+            throw new Exception("???");
+        }
+
+        /// <summary>
+        /// A → ¬¬A
+        /// </summary>
+        public static Not<Not<A>> AddDoubleNegation<A>(A proof_of_A)
         {
             Absurd not_A_implies_absurd(Not<A> not_A)
                 => not_A.Apply(proof_of_A);
@@ -128,6 +135,36 @@ namespace CurryHoward
                 return not_ex_mid.Apply(ex_mid_2);
             }
             return new Not<Not<Either<A, Not<A>>>>(not_ex_mid_implies_absurd);
+        }
+
+        /// <summary>
+        /// Continuation passing style.
+        /// </summary>
+        public static Absurd ContinuationPassingStyle()
+        {
+            {
+                int times_two(int n)
+                {
+                    var product = n * 2;
+                    return product;
+                }
+
+                var result = times_two(5);
+                Console.WriteLine($"Result is {result}");
+            }
+
+            {
+                Not<Not<int>> incomplete = Proofs.AddDoubleNegation(5);
+
+                Absurd times_two_cps(int n)
+                {
+                    var product = n * 2;
+                    Console.WriteLine($"Product is {product}");
+                    throw new Exception("Can't ever return");
+                }
+
+                return incomplete.Apply(new Not<int>(times_two_cps));
+            }
         }
     }
 }

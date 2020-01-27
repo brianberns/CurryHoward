@@ -28,7 +28,7 @@ namespace CurryHoward
 
         static void Main(string[] args)
         {
-            EitherDemo();
+            Proofs.ContinuationPassingStyle();
         }
     }
 }
